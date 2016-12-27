@@ -36,27 +36,63 @@
 		
 		$('#update').click(function(e){
 			e.preventDefault();
-			$.ajax({
-				url:"?op=user-update",
-				dataType:"json",
-				type:"POST",
-				data:{
-					user_id: id,
-					name: $('#name').val(),
-					surname:$('#surname').val(),
-					email: $('#email').val(),
-					pass: $('#pass').val(),
-					},
-				success:function(data){
-					console.log(data);
-					if(data !=0 ){
-						alert("Kayıt Güncellendi");
-						window.location ="?op=user-user";
+			var email = $('#email').val();
+			var name = $('#name').val();
+			var surname = $('#surname').val();
+			var pass = $('#pass').val();
+			var emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; 
+			if(email.match(emailFormat)){
+				//console.log("1.if");
+				if( name.length > 3 && name.length < 18 ){
+					//.log("2.if");
+					if( surname.length > 3 && surname.length < 36 ){
+						//console.log("3.if");
+						if( pass.length >= 8 ){
+							//console.log("4.if");
+							$.ajax({
+								url:"?op=user-update",
+								dataType:"json",
+								type:"POST",
+								data:{
+									user_id: id,
+									name: $('#name').val(),
+									surname:$('#surname').val(),
+									email: $('#email').val(),
+									pass: $('#pass').val(),
+									},
+								success:function(data){
+									console.log(data);
+									if(data !=0 ){
+										alert("Kayıt Güncellendi");
+										window.location ="?op=user-user";
+									}else{
+										alert("İşlem Başarısız");
+									}
+								},
+							});
+						}else{
+						alert("Şifre Uygun Değil");
+						document.updateUser.pass.focus();	
+						return false;
+						}
 					}else{
-						alert("İşlem Başarısız");
+						alert("Soyisim Uygun Değil");
+						document.updateUser.surname.focus();
+						return false;
 					}
-				},
-			});
+				}else{
+					alert("İsim Uygun Değil");
+					document.updateUser.name.focus();
+					return false;
+				}
+				
+				
+			}else{
+				alert("Mail Uygun Değil");
+				document.updateUser.email.focus();
+				console.log("false");
+				return false;
+			}
 			
 		});
 		return false;

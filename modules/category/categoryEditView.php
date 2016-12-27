@@ -1,4 +1,4 @@
-<form class="form-horizontal" id="category">
+<form class="form-horizontal" id="category" name="category">
 	<!--<input type="hidden" id="category_id" name="category_id"/>-->
 	<div class="col-md-4 col-md-offset-4">
 		<label class="control-label">Kategori Ekle</label><br><br>
@@ -24,25 +24,31 @@
 		
 		$('#update').click(function(e){
 			e.preventDefault();
-			$.ajax({
-				url:"?op=category-update",
-				dataType:"json",
-				type:"POST",
-				data:{
-					category_name: $('#categoryName').val(),
-					category_id:id,
-					},
-				success:function(data){
-					//console.log($('#categoryName').val());
-					if(data !=0 ){
-						alert("Kayıt Güncellendi");
-						window.location ="?op=category-category";
-					}else{
-						alert("İşlem Başarısız");
+			var categoryName = $('#categoryName').val();
+				if(categoryName.length != 0){
+					$.ajax({
+						url:"?op=category-update",
+						dataType:"json",
+						type:"POST",
+						data:{
+							category_name: $('#categoryName').val(),
+							category_id:id,
+							},
+						success:function(data){
+							//console.log($('#categoryName').val());
+							if(data !=0 ){
+								alert("Kayıt Güncellendi");
+								window.location ="?op=category-category";
+							}else{
+								alert("İşlem Başarısız");
+							}
+						},
+					});
+				}else{
+					alert("Kategori ismi Boş Geçilemez");
+					document.category.categoryName.focus();
+					return false;
 					}
-				},
-			});
-			
 		});
 		return false;
 	});

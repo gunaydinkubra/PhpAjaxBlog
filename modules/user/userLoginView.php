@@ -14,11 +14,11 @@
 	</div>
 </form>
 
-
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#userCheck').submit(function(e){
 			e.preventDefault();	
+			
 			$.ajax({
 				url: "index.php?op=user-check",
 				type: "POST",

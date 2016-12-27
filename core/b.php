@@ -15,11 +15,14 @@
 			b::getModul($modul);
 			$controller = $modul."Controller";
 			$newController = new $controller();
-			session::checkLogin();
-			$newController->$function();
-			
-		}
+			if( $function == 'login' || $function == 'check'|| $function == 'logout'){
+				$newController->$function();
+			}elseif(session::checkLogin()==1){
+				$newController->$function();
+			}else 
+				b::template("login", "user/userLogin");
 		
+		}
 		static function getModul($modulName){
 			include 'modules/'.$modulName.'/'.$modulName.'Controller.php';
 			include 'modules/'.$modulName.'/'.$modulName.'Model.php';

@@ -20,27 +20,62 @@
 	$(document).ready(function(){
 		$('#saveUser').submit(function(e){
 			e.preventDefault();
-			$.ajax({
-				url: "index.php?op=user-save",
-				type: "POST",
-				dataType: "json",
-				data:{
-					email: $('#email').val(),
-					pass :$('#pass').val(),
-					name: $('#name').val(),
-					surname: $('#surname').val(),
-				},
-				success: function(data){
-					if(data != 0 ){
-						alert("Kullanıcı Bilgileri Oluşturuldu.");
-						 window.location = '?op=user-user';	
+			var email = $('#email').val();
+			var name = $('#name').val();
+			var surname = $('#surname').val();
+			var pass = $('#pass').val();
+			var emailFormat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; 
+			if(email.match(emailFormat)){
+				//console.log("1.if");
+				if( name.length > 3 && name.length < 18 ){
+					//.log("2.if");
+					if( surname.length > 3 && surname.length < 36 ){
+						//console.log("3.if");
+						if( pass.length >= 8 ){
+							//console.log("4.if");
+							$.ajax({
+								url: "index.php?op=user-save",
+								type: "POST",
+								dataType: "json",
+								data:{
+									email: $('#email').val(),
+									pass :$('#pass').val(),
+									name: $('#name').val(),
+									surname: $('#surname').val(),
+								},
+								success: function(data){
+									if(data != 0 ){
+										alert("Kullanıcı Bilgileri Oluşturuldu.");
+										 window.location = '?op=user-user';	
+									}else{
+									console.log(data);
+									}
+								},
+							});
+						}else{
+						alert("Şifre Uygun Değil");
+						document.saveUser.pass.focus();	
+						return false;
+						}
 					}else{
-					console.log(data);
+						alert("Soyisim Uygun Değil");
+						document.saveUser.surname.focus();
+						return false;
 					}
-				},
-			});
-			return false;	
+				}else{
+					alert("İsim Uygun Değil");
+					document.saveUser.name.focus();
+					return false;
+				}
+				
+				
+			}else{
+				alert("Mail Uygun Değil");
+				document.saveUser.email.focus();
+				console.log("false");
+				return false;
+			}
 		});
-		
+		return false;	
 	});
 </script>

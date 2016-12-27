@@ -68,36 +68,45 @@
 		
 		$(document).on('click','#searchbtn',function(){
 			//console.log("tıkk");
-			$.ajax({
-				url:  "?op=comment-search",
-				type:  "POST",
-				dataType: "json",
-				data: {search: $('#search').val()
-				},
-				success:function(data){
-					if(data.length>0){
-						var content = '<table class="table">';
-						content += '<tr>';
-						content += '<th>comment_id</th>';
-						content += '<th>content</th>';
-						content += '<th></th>';
-						content += '<th><a href="?op=comment-createComment"><button class="btn btn-md btn-default">New Comment</button></a></th>';
-						content += '<th></th>';
-						content += '<tr>';
-						for(i=0;i<data.length; i++){
+			var search = $('#search').val();
+			if(search.length >= 3){
+				$.ajax({
+					url:  "?op=comment-search",
+					type:  "POST",
+					dataType: "json",
+					data: {search: $('#search').val()
+					},
+					success:function(data){
+						if(data.length>0){
+							var content = '<table class="table">';
 							content += '<tr>';
-							content += '<td>' +data[i]['comment_id'] + '</td>';
-							content += '<td>' +data[i]['content'] + '</td>';
-							content += '<td><button class="btn btn-xs btn-danger edit" id="'+data[i]['comment_id']+'">Edit</button></td>';
-							content += '<td><button class="btn btn-xs btn-danger delete" id="'+data[i]['comment_id']+'">Delete</button></td>';
-							content += '<td></td>';
+							content += '<th>comment_id</th>';
+							content += '<th>content</th>';
+							content += '<th></th>';
+							content += '<th><a href="?op=comment-createComment"><button class="btn btn-md btn-default">New Comment</button></a></th>';
+							content += '<th></th>';
 							content += '<tr>';
+							for(i=0;i<data.length; i++){
+								content += '<tr>';
+								content += '<td>' +data[i]['comment_id'] + '</td>';
+								content += '<td>' +data[i]['content'] + '</td>';
+								content += '<td><button class="btn btn-xs btn-danger edit" id="'+data[i]['comment_id']+'">Edit</button></td>';
+								content += '<td><button class="btn btn-xs btn-danger delete" id="'+data[i]['comment_id']+'">Delete</button></td>';
+								content += '<td></td>';
+								content += '<tr>';
+							}
+							$('#commentlist').html(content);
+						}else{
+							alert("Yorum Bulunamadı..");
+							window.location = "?op=comment-comment";
 						}
-						$('#commentlist').html(content);
-					}
-				
-				}
-			});
+					
+					},
+				});
+			}else{
+				alert("En az 3 karakter giriniz..");
+				return false;
+			}
 		});
 		return false;
 	});

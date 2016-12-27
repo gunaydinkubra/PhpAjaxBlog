@@ -45,7 +45,7 @@
 						
 					}
 					$('#bloglist').html(content);
-					console.log(data)
+					//console.log(data)
 					
 				//}
 			},
@@ -77,43 +77,51 @@
 		
 		$(document).on('click','#searchbtn',function(){
 			//console.log("tıkk");
-			$.ajax({
-				url:  "?op=blog-search",
-				type:  "POST",
-				dataType: "json",
-				data: {search: $('#search').val()
-				},
-				success:function(data){
-					if(data.length>0){
-						var content = '<table class="table">';
-						content += '<tr>';
-						content += '<th>blog_id</th>';
-						content += '<th>Title</th>';
-						content += '<th>Content</th>';
-						content += '<th>Tags</th>';
-						content += '<th>Category_id</th>';
-						content += '<th></th>';
-						content += '<th><a href="?op=blog-createBlog"><button class="btn btn-md btn-default" ">New Blog</button></a></th>';
-						content += '<th></th>';
-						content += '</tr>';
-						for(var i=0; i<data.length; i++){
+			var search = $('#search').val();
+			if(search.length >= 3){
+				$.ajax({
+					url:  "?op=blog-search",
+					type:  "POST",
+					dataType: "json",
+					data: {search: $('#search').val()
+					},
+					success:function(data){
+						if(data.length > 0){
+							var content = '<table class="table">';
 							content += '<tr>';
-							content += '<td id="id">' + data[i]['blog_id']+ '</td>';
-							content += '<td>' + data[i]['title']+ '</td>';
-							content += '<td>' + data[i]['content']+ '</td>';
-							content += '<td>' + data[i]['tags']+ '</td>';
-							content += '<td>' + data[i]['category_id']+ '</td>';
-							content += '<td><button class="btn btn-xs btn-danger edit" id="' + data[i]['blog_id'] +'">Edit</button></td>';
-							content += '<td><button class="btn btn-xs btn-danger delete"id="' + data[i]['blog_id'] +'">Delete</button></td>';
-							content += '<td></td>';
+							content += '<th>blog_id</th>';
+							content += '<th>Title</th>';
+							content += '<th>Content</th>';
+							content += '<th>Tags</th>';
+							content += '<th>Category_id</th>';
+							content += '<th></th>';
+							content += '<th><a href="?op=blog-createBlog"><button class="btn btn-md btn-default" ">New Blog</button></a></th>';
+							content += '<th></th>';
 							content += '</tr>';
-							
+							for(var i=0; i<data.length; i++){
+								content += '<tr>';
+								content += '<td id="id">' + data[i]['blog_id']+ '</td>';
+								content += '<td>' + data[i]['title']+ '</td>';
+								content += '<td>' + data[i]['content']+ '</td>';
+								content += '<td>' + data[i]['tags']+ '</td>';
+								content += '<td>' + data[i]['category_id']+ '</td>';
+								content += '<td><button class="btn btn-xs btn-danger edit" id="' + data[i]['blog_id'] +'">Edit</button></td>';
+								content += '<td><button class="btn btn-xs btn-danger delete"id="' + data[i]['blog_id'] +'">Delete</button></td>';
+								content += '<td></td>';
+								content += '</tr>';
+								
+							}
+							$('#bloglist').html(content);
+						}else{
+							alert("Blog Bulunamadı..");
+							window.location = "?op=blog-blog";
 						}
-						$('#bloglist').html(content);
-					}
-					//console.log(data);
-				},
-			});
+					},
+				});
+			}else{
+				alert("En az 3 karakter giriniz..");
+				return false;
+				}
 		});
 		return false;
 	});

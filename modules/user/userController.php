@@ -17,6 +17,7 @@
 			$result = $model->checkUser($email, $pass);
 			if( $result != null ){
 				session::set("user",$result);
+				
 			}
 			echo json_encode($result);
 		}

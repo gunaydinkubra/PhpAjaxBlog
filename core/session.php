@@ -9,8 +9,6 @@
 		static function checkLogin(){
 			if(isset ($_SESSION['user'])) return 1;
 			else return 0;
-				
-			
 		}
 	}
 ?>

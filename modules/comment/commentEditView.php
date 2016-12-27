@@ -1,4 +1,4 @@
-<form class="form-horizontal" id="comment">
+<form class="form-horizontal" name="comment" id="comment">
 	<div class="col-md-4 col-md-offset-4">
 		<label class="control-label">Yorum Yaz</label><br><br>
 		<input type="text" class="form-control" id="commentName" name="commentName" placeholder="Enter Comment"><br>
@@ -23,25 +23,31 @@
 		
 		$('#update').click(function(e){
 			e.preventDefault();
-			$.ajax({
-				url:"?op=comment-update",
-				dataType:"json",
-				type:"POST",
-				data:{
-					content: $('#commentName').val(),
-					comment_id:id,
+			var content = $('#commentName').val();
+			if(content.length !=0){
+				$.ajax({
+					url:"?op=comment-update",
+					dataType:"json",
+					type:"POST",
+					data:{
+						content: $('#commentName').val(),
+						comment_id:id,
+						},
+					success:function(data){
+						//console.log($('#categoryName').val());
+						if(data !=0 ){
+							alert("Kayıt Güncellendi");
+							window.location ="?op=comment-comment";
+						}else{
+							alert("iŞlem BaŞarısız");
+						}
 					},
-				success:function(data){
-					//console.log($('#categoryName').val());
-					if(data !=0 ){
-						alert("Kayıt Güncellendi");
-						window.location ="?op=comment-comment";
-					}else{
-						alert("iŞlem BaŞarısız");
-					}
-				},
-			});
-			
+				});
+			}else{
+				alert("Yorum alanı boş geçilemez");
+				document.comment.commentName.focus();
+				return false;
+			}
 		});
 		return false;
 	});

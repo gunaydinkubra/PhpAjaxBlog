@@ -77,42 +77,51 @@
 		
 		$(document).on('click','#searchbtn',function(){
 			//console.log("tıkk");
-			$.ajax({
-				url:  "?op=user-search",
-				type:  "POST",
-				dataType: "json",
-				data: {search: $('#search').val()
-				},
-				success:function(data){
-					if(data.length>0){
-						var content = '<table class="table">';
-						content += '<tr>';
-						content += '<th>user_id</th>';
-						content += '<th>Name</th>';
-						content += '<th>Surname</th>';
-						content += '<th>E-mail</th>';
-						content += '<th>Password</th>';
-						content += '<th></th>'
-						content += '<th><a href="?op=user-createUser"><button class="btn btn-md btn-default">New User</button></a></th>'
-						content += '<th></th>'
-						content += '</tr>';
-							for(var i=0; i<data.length; i++){
+			var search = $('#search').val();
+			if(search.length >= 3){
+				$.ajax({
+					url:  "?op=user-search",
+					type:  "POST",
+					dataType: "json",
+					data: {search: $('#search').val()
+					},
+					success:function(data){
+						if(data.length>0){
+							var content = '<table class="table">';
 							content += '<tr>';
-							content += '<td id="id">' + data[i]['user_id']+ '</td>';
-							content += '<td>' + data[i]['name']+ '</td>';
-							content += '<td>' + data[i]['surname']+ '</td>';
-							content += '<td>' + data[i]['email']+ '</td>';
-							content += '<td>' + data[i]['pass']+ '</td>';
-							content += '<td><button class="btn btn-xs btn-danger edit" id="' + data[i]['user_id'] +'">Edit</button></td>';
-							content += '<td><button class="btn btn-xs btn-danger delete" id="' + data[i]['user_id'] + '">Delete</button></td>';
-							content += '<td></td>';
+							content += '<th>user_id</th>';
+							content += '<th>Name</th>';
+							content += '<th>Surname</th>';
+							content += '<th>E-mail</th>';
+							content += '<th>Password</th>';
+							content += '<th></th>'
+							content += '<th><a href="?op=user-createUser"><button class="btn btn-md btn-default">New User</button></a></th>'
+							content += '<th></th>'
 							content += '</tr>';
-							}
-						$('#userlist').html(content);
-					}
-					console.log(data);
-				},
-			});
+								for(var i=0; i<data.length; i++){
+								content += '<tr>';
+								content += '<td id="id">' + data[i]['user_id']+ '</td>';
+								content += '<td>' + data[i]['name']+ '</td>';
+								content += '<td>' + data[i]['surname']+ '</td>';
+								content += '<td>' + data[i]['email']+ '</td>';
+								content += '<td>' + data[i]['pass']+ '</td>';
+								content += '<td><button class="btn btn-xs btn-danger edit" id="' + data[i]['user_id'] +'">Edit</button></td>';
+								content += '<td><button class="btn btn-xs btn-danger delete" id="' + data[i]['user_id'] + '">Delete</button></td>';
+								content += '<td></td>';
+								content += '</tr>';
+								}
+							$('#userlist').html(content);
+						}else{
+							alert("Kullanıcı Bulunamadı..");
+							window.location = "?op=user-user";
+						}
+						
+					},
+				});
+			}else{
+				alert("En az 3 karakter giriniz..");
+				return false;
+				}
 		});
 		
 		return false;
